@@ -4,8 +4,8 @@
 
 Version Compare allows you to easily compare if one Version is >, >=, ==, !=, <,
 or <= to another Version. It aims to be as light and flexible as possible. Inputs
-can be a String, Integer, Float, Array, or any object that defines `#to_version`
-to return one of the aforementioned types.
+can be a String, Integer, Float, Array, or any object that defines
+`#to_version`.
 
 In an effort to remain simple, Version Compare only works with up to four
 numeric values separated by periods:
