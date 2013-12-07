@@ -35,24 +35,6 @@ describe Conversions do
       end
     end
 
-    describe "#to_f" do
-      it "returns float when major only" do
-        assert { Version(1).to_f == 1.0 }
-      end
-
-      it "returns float when major and minor" do
-        assert { Version(1.0).to_f == 1.0 }
-        assert { Version(1.2).to_f == 1.2 }
-      end
-
-      it "returns truncated float when more than just major and minor" do
-        assert { Version("1.0.0").to_f == 1.0 }
-        assert { Version("1.1.9").to_f == 1.1 }
-        assert { Version("1.0.0.0").to_f == 1.0 }
-        assert { Version("1.1.9.9").to_f == 1.1 }
-      end
-    end
-
     describe "#to_a" do
       it "returns an array of integers" do
         assert { Version(1).to_a == [1] }

@@ -6,34 +6,18 @@ class Version
 
   attr_accessor *NAMES
 
-  def initialize(value)
-    @major, @minor, @tiny, @patch = begin
-      if value.respond_to?(:to_ary)
-        value.to_ary.map(&:to_i)
-      elsif value.respond_to?(:to_version)
-        value.to_version.to_a
-      else
-        value.to_s.split('.').map(&:to_i)
-      end
-    end
-  end
-
   # Implicit conversion method
   def to_version
     self
   end
 
   def to_s
-    [major, minor, tiny, patch].compact.join('.')
+    NAMES.map { |name| public_send(name) }.compact.join('.')
   end
   alias :to_str :to_s
 
-  def to_f
-    to_s.to_f
-  end
-
   def to_a
-    NAMES.map { |name| send(name) }.compact
+    NAMES.map { |name| public_send(name) }.compact
   end
   alias :to_ary :to_a
 
@@ -52,5 +36,19 @@ class Version
       return result unless result.zero?
     end
     0
+  end
+
+  private
+
+  def initialize(value)
+    @major, @minor, @tiny, @patch = begin
+      if value.respond_to?(:to_ary)
+        value.to_ary.map(&:to_i)
+      elsif value.respond_to?(:to_version)
+        value.to_version.to_a
+      else
+        value.to_s.split('.').map(&:to_i)
+      end
+    end
   end
 end

@@ -2,10 +2,9 @@
 
 [![Gem Version](https://badge.fury.io/rb/version_compare.png)](http://badge.fury.io/rb/version_compare)
 
-Version Compare allows you to easily compare if one Version is >, >=, ==, !=, <,
-or <= to another Version. It aims to be as light and flexible as possible. Inputs
-can be a String, Integer, Float, Array, or any object that defines
-`#to_version`.
+Version Compare allows you to easily compare if one Version (string) to another
+Version (string). It aims to be as light and flexible as possible. Inputs can be
+a String, Integer, Float, Array, or any object that defines `#to_version`.
 
 In an effort to remain simple, Version Compare only works with up to four
 numeric values separated by periods:
@@ -76,6 +75,8 @@ Version("1.2.3.4") <= Version("1.2.3.4") # => true
 Version([1, 2]) == Version(["1", "2"]) # => true
 Version("1.2.0.0") == Version(1.2) # => true
 Version("1.0.0.0") != Version(1) # => false
+[Version(1), Version("1.0.0.1"), Version(0.1)].sort # => ["0.1", "1", "1.0.0.1"]
+[Version(1), Version("1.0.0.1"), Version(0.1)].sort { |a, b| b <=> a } # => ["1.0.0.1", "1", "0.1"]
 ```
 
 ### Wait, so what exactly is this `Version` ... constant?
