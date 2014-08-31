@@ -41,7 +41,7 @@ class Version
   private
 
   def initialize(value)
-    @major, @minor, @tiny, @patch = begin
+    @major, @minor, @tiny, @patch =
       if value.respond_to?(:to_ary)
         value.to_ary.map(&:to_i)
       elsif value.respond_to?(:to_version)
@@ -49,6 +49,5 @@ class Version
       else
         value.to_s.split('.').map(&:to_i)
       end
-    end
   end
 end
