@@ -98,3 +98,6 @@ DEPENDENCIES
   rails (>= 3.0.0)
   sqlite3
   version_compare!
+
+BUNDLED WITH
+   1.11.2

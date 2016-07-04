@@ -2,37 +2,37 @@
 # methods. Anytime one of the standard conversion methods are needed, the
 # Conversions module can be included and then used freely.
 module Conversions
-  require_relative "version"
+  require_relative "comparable_version"
 
-  # The `Version()` conversion method is defined as a module_function so that it
+  # The `ComparableVersion()` conversion method is defined as a module_function so that it
   # may also be called directly without needing to include the Conversions module
   # if so desired.
   #
   # @example
-  #   Conversions.Version(1.2).to_s # => "1.2"
+  #   Conversions.ComparableVersion(1.2).to_s # => "1.2"
   module_function
 
-  # Strict conversion method for creating a `Version` object out of anything
-  # that sensibly is a Version.
+  # Strict conversion method for creating a `ComparableVersion` object out of anything
+  # that sensibly is a ComparableVersion.
   #
   # @param [Object] value the object to be converted
   #
   # @example
-  #   Version(1) # => #<Version:0x007fd8144ea658 @major=1, @minor=nil, @tiny=nil, @patch=nil>
-  #   Version(1.2) # => #<Version:0x007fd8144ea658 @major=1, @minor=2, @tiny=nil, @patch=nil>
-  #   Version("1.2.3") # => #<Version:0x007fd8144ea658 @major=1, @minor=2, @tiny=3, @patch=nil>
-  #   Version(["1", "2", "3", "4"]) # => #<Version:0x007fd8144f98b0 @major=1, @minor=2, @tiny=3, @patch=4>
-  def Version(value)
+  #   ComparableVersion(1) # => #<ComparableVersion:0x007fd8144ea658 @major=1, @minor=nil, @tiny=nil, @patch=nil>
+  #   ComparableVersion(1.2) # => #<ComparableVersion:0x007fd8144ea658 @major=1, @minor=2, @tiny=nil, @patch=nil>
+  #   ComparableVersion("1.2.3") # => #<ComparableVersion:0x007fd8144ea658 @major=1, @minor=2, @tiny=3, @patch=nil>
+  #   ComparableVersion(["1", "2", "3", "4"]) # => #<ComparableVersion:0x007fd8144f98b0 @major=1, @minor=2, @tiny=3, @patch=4>
+  def ComparableVersion(value)
     case value
     when String,
          Integer,
          Float,
          -> val { val.respond_to?(:to_ary) }
-      Version.new(value)
-    when -> val { val.respond_to?(:to_version) }
-      value.to_version
+      ComparableVersion.new(value)
+    when -> val { val.respond_to?(:to_comparable_version) }
+      value.to_comparable_version
     else
-      raise TypeError, "Cannot convert #{value.inspect} to Version"
+      raise TypeError, "Cannot convert #{value.inspect} to ComparableVersion"
     end
   end
 end

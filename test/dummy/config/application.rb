@@ -21,8 +21,8 @@ module Dummy
 
     VERSION = "1.2".freeze
 
-    def to_version
-      Version.new(VERSION)
+    def to_comparable_version
+      ComparableVersion.new(VERSION)
     end
   end
 end

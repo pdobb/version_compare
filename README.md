@@ -4,7 +4,7 @@
 
 Version Compare allows you to easily compare if one Version (string) to another
 Version (string). It aims to be as light and flexible as possible. Inputs can be
-a String, Integer, Float, Array, or any object that defines `#to_version`.
+a String, Integer, Float, Array, or any object that defines `#to_comparable_version`.
 
 For simplicity's sake, Version Compare only works with up to four numeric
 values:
@@ -40,7 +40,7 @@ bundle
 
 ## Usage
 
-To get started, you can either use `Version.new(<value>)` or `Version(<value>)`.
+To get started, you can either use `ComparableVersion.new(<value>)` or `ComparableVersion(<value>)`.
 To get the latter to work, you'll need to call `include ::Conversions` in the
 class or context you're wanting to use it at.
 
@@ -49,7 +49,7 @@ class MyClass
   include Conversions
 
   def my_method
-    Version(1) > Version(2)
+    ComparableVersion(1) > ComparableVersion(2)
   end
 end
 ```
@@ -59,65 +59,65 @@ Or, to test on the Rails Console:
 ```ruby
 [1] pry(main)> include ::Conversions
 => Object
-[2] pry(main)> Version(1.0) > Version(1)
+[2] pry(main)> ComparableVersion(1.0) > ComparableVersion(1)
 => false
 
 # - OR (without using `include ::Conversions`) -
 
-[1] pry(main)> Conversions.Version(1.0) > Conversions.Version(1)
+[1] pry(main)> Conversions.ComparableVersion(1.0) > Conversions.ComparableVersion(1)
 => false
 ```
 
-Version Compare uses the `Comparable` mixin for comparisons, so you get all the
+ComparableVersion Compare uses the `Comparable` mixin for comparisons, so you get all the
 usual operators:
 
 ```ruby
-Version(2) > Version(1) # => true
-Version(1.2) > Version(1.2) # => false
-Version("1.2.3") >= Version("1.2") # => true
-Version("1.2.3.4") <= Version("1.2.3.4") # => true
-Version([1, 2]) == Version(["1", "2"]) # => true
-Version("1.2.0.0") == Version(1.2) # => true
-Version("1.0.0.0") != Version(1) # => false
-[Version(1), Version("1.0.0.1"), Version(0.1)].sort # => ["0.1", "1", "1.0.0.1"]
-[Version(1), Version("1.0.0.1"), Version(0.1)].sort { |a, b| b <=> a } # => ["1.0.0.1", "1", "0.1"]
+ComparableVersion(2) > ComparableVersion(1) # => true
+ComparableVersion(1.2) > ComparableVersion(1.2) # => false
+ComparableVersion("1.2.3") >= ComparableVersion("1.2") # => true
+ComparableVersion("1.2.3.4") <= ComparableVersion("1.2.3.4") # => true
+ComparableVersion([1, 2]) == ComparableVersion(["1", "2"]) # => true
+ComparableVersion("1.2.0.0") == ComparableVersion(1.2) # => true
+ComparableVersion("1.0.0.0") != ComparableVersion(1) # => false
+[ComparableVersion(1), ComparableVersion("1.0.0.1"), ComparableVersion(0.1)].sort # => ["0.1", "1", "1.0.0.1"]
+[ComparableVersion(1), ComparableVersion("1.0.0.1"), ComparableVersion(0.1)].sort { |a, b| b <=> a } # => ["1.0.0.1", "1", "0.1"]
 ```
 
 
-### Wait, so what exactly is this `Version` ... constant?
+### Wait, so what exactly is this `ComparableVersion` ... constant?
 
-`Version()` is actually a conversion function. It follows the Ruby convention of
+`ComparableVersion()` is actually a conversion function. It follows the Ruby convention of
 defining a conversion function that uses the same name as the class it
 represents, such as how `Array()` converts inputs to an `Array` object.
-Just like the standard Ruby conversion functions, `Version()` tries its hardest
-to convert any Version-like input into a new `Version` object. Given a numeric,
-string, or array input (which are all obvious conversions to make), `Version()`
-is essentially the same as `Version.new()`. However, `Version()` is otherwise a
+Just like the standard Ruby conversion functions, `ComparableVersion()` tries its hardest
+to convert any ComparableVersion-like input into a new `ComparableVersion` object. Given a numeric,
+string, or array input (which are all obvious conversions to make), `ComparableVersion()`
+is essentially the same as `ComparableVersion.new()`. However, `ComparableVersion()` is otherwise a
 little more strict in that if you pass in an object that doesn't reasonably look
-like a Version it will raise a `TypeError` exception. Doing the same for
-`Version.new()` will ultimately just `#to_s` the input; and since almost
+like a ComparableVersion it will raise a `TypeError` exception. Doing the same for
+`ComparableVersion.new()` will ultimately just `#to_s` the input; and since almost
 every object responds to `#to_s`, the result is that you may end up with a 0
 version. For example:
 
 ```ruby
-Version.new(OpenStruct.new(a: 1)).to_s # => "0"
+ComparableVersion.new(OpenStruct.new(a: 1)).to_s # => "0"
 ```
 
 
-### Can I pass my own custom objects into `Version()`?
+### Can I pass my own custom objects into `ComparableVersion()`?
 
-Yes! All you have to do is define a `#to_version` implicit conversion method in
-your object that creates a new Version object in the usual fashion.
+Yes! All you have to do is define a `#to_comparable_version` implicit conversion method in
+your object that creates a new ComparableVersion object in the usual fashion.
 
 ```ruby
 class MyObject
   VERSION = 1.9
-  def to_version
-    Version.new(VERSION.to_s)
+  def to_comparable_version
+    ComparableVersion.new(VERSION.to_s)
   end
 end
 
-Version(MyObject.new) > Version(2.0) # => false
+ComparableVersion(MyObject.new) > ComparableVersion(2.0) # => false
 ```
 
 
@@ -135,14 +135,14 @@ module Dummy
 
     VERSION = "1.2".freeze
 
-    def to_version
-      Version.new(VERSION) # Or Version.new([1, 2]) or whatever...
+    def to_comparable_version
+      ComparableVersion.new(VERSION) # Or ComparableVersion.new([1, 2]) or whatever...
     end
   end
 end
 
 # Now, from the context of that Rails app you can call:
-Version(Rails.application) > Version(1.0) # => true
+ComparableVersion(Rails.application) > ComparableVersion(1.0) # => true
 ```
 
 So you see... the sky is the limit!
