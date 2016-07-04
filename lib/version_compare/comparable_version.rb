@@ -58,4 +58,14 @@ class ComparableVersion
 
     0
   end
+
+private
+
+  def identification
+    version_identifiers =
+      NAMES.map { |name| "#{name}:#{send(name)}" if send(name).present? }
+           .compact
+           .join(", ")
+    "#{self.class}[#{version_identifiers}]"
+  end
 end

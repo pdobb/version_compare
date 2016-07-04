@@ -1,6 +1,13 @@
 require 'test_helper'
 
 describe ComparableVersion do
+  describe "#inspect" do
+    it "returns expected inspect String format" do
+      assert ComparableVersion("2.0.0").inspect
+        "ComparableVersion[major:2, minor:0, tiny:0]"
+    end
+  end
+
   describe "#>" do
     it "returns true when lvalue is greater than rvalue" do
       ComparableVersion(2).must_be :>, ComparableVersion(1)
