@@ -1,4 +1,6 @@
 class ComparableVersion
+  DEFAULT_SEPARATOR = ".".freeze
+
   include Comparable
 
   # ComparableVersion component names
@@ -30,7 +32,7 @@ class ComparableVersion
   end
 
   def to_s
-    NAMES.map { |name| public_send(name) }.compact.join('.')
+    NAMES.map { |name| public_send(name) }.compact.join(separator)
   end
   alias :to_str :to_s
 
@@ -53,19 +55,7 @@ class ComparableVersion
       result = send(name).to_i <=> other.send(name).to_i
       return result unless result.zero?
     end
+
     0
-  end
-
-  private
-
-  def initialize(value)
-    @major, @minor, @tiny, @patch =
-      if value.respond_to?(:to_ary)
-        value.to_ary.map(&:to_i)
-      elsif value.respond_to?(:to_version)
-        value.to_version.to_a
-      else
-        value.to_s.split('.').map(&:to_i)
-      end
   end
 end
