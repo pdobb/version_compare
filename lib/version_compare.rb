@@ -1,5 +1,5 @@
-require "version_compare/conversions"
-
 module VersionCompare
-  autoload :ComparableVersion, "version_compare/comparable_version"
 end
+
+require "version_compare/conversions"
+require "version_compare/comparable_version"

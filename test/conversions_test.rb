@@ -1,80 +1,93 @@
-require 'test_helper'
+require "test_helper"
 
-describe Conversions do
-  describe "conversion function" do
-    it "works on integers" do
-      ComparableVersion(1).class.must_equal ComparableVersion
+class VersionCompare::ConversionsTest < Minitest::Spec
+  describe VersionCompare::Conversions do
+    let(:klazz) { VersionCompare::Conversions }
+
+    describe ".Conversion" do
+      it "works on integers" do
+        klazz.ComparableVersion(1).
+          must_be_instance_of VersionCompare::ComparableVersion
+      end
+
+      it "works on floats" do
+        klazz.ComparableVersion(1.2).
+          must_be_instance_of VersionCompare::ComparableVersion
+      end
+
+      it "works on strings" do
+        klazz.ComparableVersion("1.2.3.4").
+          must_be_instance_of VersionCompare::ComparableVersion
+      end
+
+      it "works on arrays" do
+        klazz.ComparableVersion([1, 2, 3, 4]).
+          must_be_instance_of VersionCompare::ComparableVersion
+        klazz.ComparableVersion([1, 2, 3, 4]).
+          must_equal klazz.ComparableVersion("1.2.3.4")
+        klazz.ComparableVersion(["1", "2", "3", "4"]).
+          must_equal klazz.ComparableVersion("1.2.3.4")
+      end
+
+      it "works on klazz.ComparableVersions" do
+        klazz.ComparableVersion(klazz.ComparableVersion(1.2)).
+          must_be_instance_of VersionCompare::ComparableVersion
+        klazz.ComparableVersion(klazz.ComparableVersion(1.2)).
+          must_equal klazz.ComparableVersion(1.2)
+      end
     end
 
-    it "works on floats" do
-      ComparableVersion(1.2).class.must_equal ComparableVersion
-    end
-
-    it "works on strings" do
-      ComparableVersion("1.2.3.4").class.must_equal ComparableVersion
-    end
-
-    it "works on arrays" do
-      ComparableVersion([1, 2, 3, 4]).must_be_instance_of ComparableVersion
-      ComparableVersion([1, 2, 3, 4]).must_equal ComparableVersion("1.2.3.4")
-      ComparableVersion(["1", "2", "3", "4"]).must_equal ComparableVersion("1.2.3.4")
-    end
-
-    it "works on ComparableVersions" do
-      ComparableVersion(ComparableVersion(1.2)).must_be_instance_of ComparableVersion
-      ComparableVersion(ComparableVersion(1.2)).must_equal ComparableVersion(1.2)
-    end
-  end
-
-  describe "explicit conversions" do
     describe "#to_s" do
       it "returns string regardless of input" do
-        ComparableVersion(1).to_s.must_equal "1"
-        ComparableVersion(1.2).to_s.must_equal "1.2"
-        ComparableVersion("1.2.3").to_s.must_equal "1.2.3"
+        klazz.ComparableVersion(1).to_s.must_equal "1"
+        klazz.ComparableVersion(1.2).to_s.must_equal "1.2"
+        klazz.ComparableVersion("1.2.3").to_s.must_equal "1.2.3"
       end
     end
 
     describe "#to_a" do
       it "returns an array of integers" do
-        ComparableVersion(1).to_a.must_equal [1]
-        ComparableVersion(1.0).to_a.must_equal [1, 0]
-        ComparableVersion("1.2.3").to_a.must_equal [1, 2, 3]
-        ComparableVersion("1.2.3.4").to_a.must_equal [1, 2, 3, 4]
-        ComparableVersion(["1", "2", "3", "4"]).to_a.must_equal [1, 2, 3, 4]
+        klazz.ComparableVersion(1).to_a.must_equal [1]
+        klazz.ComparableVersion(1.0).to_a.must_equal [1, 0]
+        klazz.ComparableVersion("1.2.3").to_a.must_equal [1, 2, 3]
+        klazz.ComparableVersion("1.2.3.4").to_a.must_equal [1, 2, 3, 4]
+        klazz.ComparableVersion(["1", "2", "3", "4"]).to_a.
+          must_equal [1, 2, 3, 4]
       end
     end
-  end
 
-  describe "implicit conversions" do
-    describe "string concatenation" do
+    context "#+" do
       it "concatenates" do
-        ("version: " + ComparableVersion("1.2.3.4")).must_equal "version: 1.2.3.4"
+        ("version: " + klazz.ComparableVersion("1.2.3.4")).
+          must_equal "version: 1.2.3.4"
       end
     end
 
-    describe "CustomObjects" do
-      describe "without #to_comparable_version" do
+    context "CustomObjects" do
+      context "without #to_comparable_version" do
         it "raises TypeError when attempting to convert custom objects that don't implement #to_comparable_version" do
-          -> { ComparableVersion(Object.new) }.must_raise TypeError
+          -> { klazz.ComparableVersion(Object.new) }.must_raise TypeError
         end
       end
 
-      describe "with #to_comparable_version" do
+      context "with #to_comparable_version" do
         before do
-          class CustomObject < Object
+          class MyObject < Object
             VERSION = 1.9
+
             def to_comparable_version
-              ComparableVersion.new(VERSION.to_s)
+              VersionCompare::ComparableVersion.new(VERSION.to_s)
             end
           end
         end
 
-        subject { CustomObject.new }
+        subject { MyObject.new }
 
-        it "returns a ComparableVersion object" do
-          ComparableVersion(subject).must_be_instance_of ComparableVersion
-          ComparableVersion.new(subject).must_be_instance_of ComparableVersion
+        it "returns a klazz.ComparableVersion object" do
+          klazz.ComparableVersion(subject).
+            must_be_instance_of VersionCompare::ComparableVersion
+          VersionCompare::ComparableVersion.new(subject).
+            must_be_instance_of VersionCompare::ComparableVersion
         end
       end
     end

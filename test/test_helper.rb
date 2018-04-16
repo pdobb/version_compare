@@ -1,13 +1,21 @@
-# Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
+require "simplecov"
+SimpleCov.start do
+  add_filter "/bin/"
+  add_filter "/test/"
+end
+puts "SimpleCov enabled."
 
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
-require "rails/test_help"
-require "minitest/rails"
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "version_compare"
 
-include ::Conversions
+require "minitest/autorun"
+require "minitest/reporters"
+require "pry"
 
-Rails.backtrace_cleaner.remove_silencers!
+Minitest::Test.make_my_diffs_pretty!
+reporter_options = { color: true }
+Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new(reporter_options)
 
-# Load support files
-Dir[Rails.root.join("test/support/**/*.rb")].each { |f| require f }
+def context(*args, &block)
+  describe(*args, &block)
+end

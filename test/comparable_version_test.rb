@@ -1,188 +1,192 @@
 require 'test_helper'
 
-describe ComparableVersion do
-  describe "#inspect" do
-    it "returns expected inspect String format" do
-      assert ComparableVersion("2.0.0").inspect
-        "ComparableVersion[major:2, minor:0, tiny:0]"
-    end
-  end
+class VersionCompare::ConversionsTest < Minitest::Spec
+  describe VersionCompare::ComparableVersion do
+    let(:klazz) { VersionCompare::ComparableVersion }
 
-  describe "#>" do
-    it "returns true when lvalue is greater than rvalue" do
-      ComparableVersion(2).must_be :>, ComparableVersion(1)
-      ComparableVersion(2).must_be :>, ComparableVersion(1.2)
-      ComparableVersion(2).must_be :>, ComparableVersion("1.2.3")
-      ComparableVersion(2).must_be :>, ComparableVersion("1.2.3.4")
-
-      ComparableVersion(2.0).must_be :>, ComparableVersion(1)
-      ComparableVersion(2.0).must_be :>, ComparableVersion(1.0)
-      ComparableVersion(2.1).must_be :>, ComparableVersion("2.0.3")
-      ComparableVersion(2.1).must_be :>, ComparableVersion("2.0.3.4")
-
-      ComparableVersion("2.0.0").must_be :>, ComparableVersion(1)
-      ComparableVersion("2.1.0").must_be :>, ComparableVersion(1.2)
-      ComparableVersion("2.1.0").must_be :>, ComparableVersion("1.2.0")
-      ComparableVersion("2.1.1").must_be :>, ComparableVersion("2.1.0.4")
-
-      ComparableVersion("2.0.0.0").must_be :>, ComparableVersion(1)
-      ComparableVersion("2.1.0.0").must_be :>, ComparableVersion(2.0)
-      ComparableVersion("2.1.1.0").must_be :>, ComparableVersion("2.1.0")
-      ComparableVersion("2.1.3.0").must_be :>, ComparableVersion("2.1.2.4")
-
-      ComparableVersion(2).must_be :>, ComparableVersion(1.99)
-      ComparableVersion(1.3).must_be :>, ComparableVersion("1.2.99")
-      ComparableVersion("1.2.4").must_be :>, ComparableVersion("1.2.3.99")
+    describe "#inspect" do
+      it "returns expected inspect String format" do
+        assert klazz.new("2.0.0").inspect
+          "VersionCompare::ComparableVersion[major:2, minor:0, tiny:0]"
+      end
     end
 
-    it "returns false when lvalue is less than rvalue" do
-      ComparableVersion(1).wont_be :>, ComparableVersion(2)
-      ComparableVersion(1.2).wont_be :>, ComparableVersion(2)
-      ComparableVersion("1.2.3").wont_be :>, ComparableVersion(2)
-      ComparableVersion("1.2.3.4").wont_be :>, ComparableVersion(2)
+    describe "#>" do
+      it "returns true when lvalue is greater than rvalue" do
+        klazz.new(2).must_be :>, klazz.new(1)
+        klazz.new(2).must_be :>, klazz.new(1.2)
+        klazz.new(2).must_be :>, klazz.new("1.2.3")
+        klazz.new(2).must_be :>, klazz.new("1.2.3.4")
 
-      ComparableVersion(1).wont_be :>, ComparableVersion(2.0)
-      ComparableVersion(2.0).wont_be :>, ComparableVersion(2.1)
-      ComparableVersion("2.0.3").wont_be :>, ComparableVersion(2.1)
-      ComparableVersion("2.0.3.4").wont_be :>, ComparableVersion(2.1)
+        klazz.new(2.0).must_be :>, klazz.new(1)
+        klazz.new(2.0).must_be :>, klazz.new(1.0)
+        klazz.new(2.1).must_be :>, klazz.new("2.0.3")
+        klazz.new(2.1).must_be :>, klazz.new("2.0.3.4")
 
-      ComparableVersion(1).wont_be :>, ComparableVersion("2.0.0")
-      ComparableVersion(1.2).wont_be :>, ComparableVersion("2.1.0")
-      ComparableVersion("2.1.0").wont_be :>, ComparableVersion("2.1.1")
-      ComparableVersion("2.1.0.4").wont_be :>, ComparableVersion("2.1.1")
+        klazz.new("2.0.0").must_be :>, klazz.new(1)
+        klazz.new("2.1.0").must_be :>, klazz.new(1.2)
+        klazz.new("2.1.0").must_be :>, klazz.new("1.2.0")
+        klazz.new("2.1.1").must_be :>, klazz.new("2.1.0.4")
 
-      ComparableVersion(1).wont_be :>, ComparableVersion("2.0.0.0")
-      ComparableVersion(2.0).wont_be :>, ComparableVersion("2.1.0.0")
-      ComparableVersion("2.1.0").wont_be :>, ComparableVersion("2.1.1.0")
-      ComparableVersion("2.1.0.4").wont_be :>, ComparableVersion("2.1.1.0")
+        klazz.new("2.0.0.0").must_be :>, klazz.new(1)
+        klazz.new("2.1.0.0").must_be :>, klazz.new(2.0)
+        klazz.new("2.1.1.0").must_be :>, klazz.new("2.1.0")
+        klazz.new("2.1.3.0").must_be :>, klazz.new("2.1.2.4")
 
-      ComparableVersion(1.99).wont_be :>, ComparableVersion(2)
-      ComparableVersion("1.2.99").wont_be :>, ComparableVersion(1.3)
-      ComparableVersion("1.2.3.99").wont_be :>, ComparableVersion("1.2.4")
+        klazz.new(2).must_be :>, klazz.new(1.99)
+        klazz.new(1.3).must_be :>, klazz.new("1.2.99")
+        klazz.new("1.2.4").must_be :>, klazz.new("1.2.3.99")
+      end
+
+      it "returns false when lvalue is less than rvalue" do
+        klazz.new(1).wont_be :>, klazz.new(2)
+        klazz.new(1.2).wont_be :>, klazz.new(2)
+        klazz.new("1.2.3").wont_be :>, klazz.new(2)
+        klazz.new("1.2.3.4").wont_be :>, klazz.new(2)
+
+        klazz.new(1).wont_be :>, klazz.new(2.0)
+        klazz.new(2.0).wont_be :>, klazz.new(2.1)
+        klazz.new("2.0.3").wont_be :>, klazz.new(2.1)
+        klazz.new("2.0.3.4").wont_be :>, klazz.new(2.1)
+
+        klazz.new(1).wont_be :>, klazz.new("2.0.0")
+        klazz.new(1.2).wont_be :>, klazz.new("2.1.0")
+        klazz.new("2.1.0").wont_be :>, klazz.new("2.1.1")
+        klazz.new("2.1.0.4").wont_be :>, klazz.new("2.1.1")
+
+        klazz.new(1).wont_be :>, klazz.new("2.0.0.0")
+        klazz.new(2.0).wont_be :>, klazz.new("2.1.0.0")
+        klazz.new("2.1.0").wont_be :>, klazz.new("2.1.1.0")
+        klazz.new("2.1.0.4").wont_be :>, klazz.new("2.1.1.0")
+
+        klazz.new(1.99).wont_be :>, klazz.new(2)
+        klazz.new("1.2.99").wont_be :>, klazz.new(1.3)
+        klazz.new("1.2.3.99").wont_be :>, klazz.new("1.2.4")
+      end
+
+      it "returns false when lvalue is equal to rvalue" do
+        klazz.new(1).wont_be :>, klazz.new(1.0)
+        klazz.new(1.2).wont_be :>, klazz.new("1.2.0")
+        klazz.new("1.2.3").wont_be :>, klazz.new("1.2.3.0")
+        klazz.new("1.2.3.4").wont_be :>, klazz.new("1.2.3.4")
+
+        klazz.new(1.0).wont_be :>, klazz.new(1)
+        klazz.new("1.2.0").wont_be :>, klazz.new(1.2)
+        klazz.new("1.2.3").wont_be :>, klazz.new("1.2.3.0")
+        klazz.new("1.2.3.4").wont_be :>, klazz.new("1.2.3.4")
+      end
     end
 
-    it "returns false when lvalue is equal to rvalue" do
-      ComparableVersion(1).wont_be :>, ComparableVersion(1.0)
-      ComparableVersion(1.2).wont_be :>, ComparableVersion("1.2.0")
-      ComparableVersion("1.2.3").wont_be :>, ComparableVersion("1.2.3.0")
-      ComparableVersion("1.2.3.4").wont_be :>, ComparableVersion("1.2.3.4")
+    describe "#==" do
+      it "returns false when lvalue is less than rvalue" do
+        klazz.new(1.2).wont_equal klazz.new(2)
+        klazz.new("1.2.3").wont_equal klazz.new(2)
+        klazz.new("1.2.3.4").wont_equal klazz.new(2)
 
-      ComparableVersion(1.0).wont_be :>, ComparableVersion(1)
-      ComparableVersion("1.2.0").wont_be :>, ComparableVersion(1.2)
-      ComparableVersion("1.2.3").wont_be :>, ComparableVersion("1.2.3.0")
-      ComparableVersion("1.2.3.4").wont_be :>, ComparableVersion("1.2.3.4")
-    end
-  end
+        klazz.new(1).wont_equal klazz.new(2.0)
+        klazz.new("2.0.3").wont_equal klazz.new(2.1)
+        klazz.new("2.0.3.4").wont_equal klazz.new(2.1)
 
-  describe "#==" do
-    it "returns false when lvalue is less than rvalue" do
-      ComparableVersion(1.2).wont_equal ComparableVersion(2)
-      ComparableVersion("1.2.3").wont_equal ComparableVersion(2)
-      ComparableVersion("1.2.3.4").wont_equal ComparableVersion(2)
+        klazz.new(1).wont_equal klazz.new("2.0.0")
+        klazz.new(1.2).wont_equal klazz.new("2.1.0")
+        klazz.new("2.1.0.4").wont_equal klazz.new("2.1.1")
 
-      ComparableVersion(1).wont_equal ComparableVersion(2.0)
-      ComparableVersion("2.0.3").wont_equal ComparableVersion(2.1)
-      ComparableVersion("2.0.3.4").wont_equal ComparableVersion(2.1)
+        klazz.new(1).wont_equal klazz.new("2.0.0.0")
+        klazz.new(2.0).wont_equal klazz.new("2.1.0.0")
+        klazz.new("2.1.0").wont_equal klazz.new("2.1.1.0")
 
-      ComparableVersion(1).wont_equal ComparableVersion("2.0.0")
-      ComparableVersion(1.2).wont_equal ComparableVersion("2.1.0")
-      ComparableVersion("2.1.0.4").wont_equal ComparableVersion("2.1.1")
+        klazz.new(1.99).wont_equal klazz.new(2)
+        klazz.new("1.2.99").wont_equal klazz.new(1.3)
+        klazz.new("1.2.3.99").wont_equal klazz.new("1.2.4")
+      end
 
-      ComparableVersion(1).wont_equal ComparableVersion("2.0.0.0")
-      ComparableVersion(2.0).wont_equal ComparableVersion("2.1.0.0")
-      ComparableVersion("2.1.0").wont_equal ComparableVersion("2.1.1.0")
+      it "returns false when lvalue is greater than rvalue" do
+        klazz.new(2).wont_equal klazz.new(1.2)
+        klazz.new(2).wont_equal klazz.new("1.2.3")
+        klazz.new(2).wont_equal klazz.new("1.2.3.4")
 
-      ComparableVersion(1.99).wont_equal ComparableVersion(2)
-      ComparableVersion("1.2.99").wont_equal ComparableVersion(1.3)
-      ComparableVersion("1.2.3.99").wont_equal ComparableVersion("1.2.4")
-    end
+        klazz.new(2.0).wont_equal klazz.new(1)
+        klazz.new(2.1).wont_equal klazz.new("2.0.3")
+        klazz.new(2.1).wont_equal klazz.new("2.0.3.4")
 
-    it "returns false when lvalue is greater than rvalue" do
-      ComparableVersion(2).wont_equal ComparableVersion(1.2)
-      ComparableVersion(2).wont_equal ComparableVersion("1.2.3")
-      ComparableVersion(2).wont_equal ComparableVersion("1.2.3.4")
+        klazz.new("2.0.0").wont_equal klazz.new(1)
+        klazz.new("2.1.0").wont_equal klazz.new(1.2)
+        klazz.new("2.1.1").wont_equal klazz.new("2.1.0.4")
 
-      ComparableVersion(2.0).wont_equal ComparableVersion(1)
-      ComparableVersion(2.1).wont_equal ComparableVersion("2.0.3")
-      ComparableVersion(2.1).wont_equal ComparableVersion("2.0.3.4")
+        klazz.new("2.0.0.0").wont_equal klazz.new(1)
+        klazz.new("2.1.0.0").wont_equal klazz.new(2.0)
+        klazz.new("2.1.1.0").wont_equal klazz.new("2.1.0")
 
-      ComparableVersion("2.0.0").wont_equal ComparableVersion(1)
-      ComparableVersion("2.1.0").wont_equal ComparableVersion(1.2)
-      ComparableVersion("2.1.1").wont_equal ComparableVersion("2.1.0.4")
+        klazz.new(2).wont_equal klazz.new(1.99)
+        klazz.new(1.3).wont_equal klazz.new("1.2.99")
+        klazz.new("1.2.4").wont_equal klazz.new("1.2.3.99")
+      end
 
-      ComparableVersion("2.0.0.0").wont_equal ComparableVersion(1)
-      ComparableVersion("2.1.0.0").wont_equal ComparableVersion(2.0)
-      ComparableVersion("2.1.1.0").wont_equal ComparableVersion("2.1.0")
+      it "returns true when lvalue is equal to rvalue" do
+        klazz.new(1.0).must_equal klazz.new(1)
+        klazz.new("1.2.0").must_equal klazz.new(1.2)
+        klazz.new("1.2.3.0").must_equal klazz.new("1.2.3")
 
-      ComparableVersion(2).wont_equal ComparableVersion(1.99)
-      ComparableVersion(1.3).wont_equal ComparableVersion("1.2.99")
-      ComparableVersion("1.2.4").wont_equal ComparableVersion("1.2.3.99")
+        klazz.new(1).must_equal klazz.new(1.0)
+        klazz.new(1.2).must_equal klazz.new("1.2.0")
+        klazz.new("1.2.3").must_equal klazz.new("1.2.3.0")
+      end
     end
 
-    it "returns true when lvalue is equal to rvalue" do
-      ComparableVersion(1.0).must_equal ComparableVersion(1)
-      ComparableVersion("1.2.0").must_equal ComparableVersion(1.2)
-      ComparableVersion("1.2.3.0").must_equal ComparableVersion("1.2.3")
+    describe "#<" do
+      it "returns true when lvalue is less than rvalue" do
+        klazz.new(1.2).must_be :<, klazz.new(2)
+        klazz.new("1.2.3").must_be :<, klazz.new(2)
+        klazz.new("1.2.3.4").must_be :<, klazz.new(2)
 
-      ComparableVersion(1).must_equal ComparableVersion(1.0)
-      ComparableVersion(1.2).must_equal ComparableVersion("1.2.0")
-      ComparableVersion("1.2.3").must_equal ComparableVersion("1.2.3.0")
-    end
-  end
+        klazz.new(1).must_be :<, klazz.new(2.0)
+        klazz.new("2.0.3").must_be :<, klazz.new(2.1)
+        klazz.new("2.0.3.4").must_be :<, klazz.new(2.1)
 
-  describe "#<" do
-    it "returns true when lvalue is less than rvalue" do
-      ComparableVersion(1.2).must_be :<, ComparableVersion(2)
-      ComparableVersion("1.2.3").must_be :<, ComparableVersion(2)
-      ComparableVersion("1.2.3.4").must_be :<, ComparableVersion(2)
+        klazz.new(1).must_be :<, klazz.new("2.0.0")
+        klazz.new(1.2).must_be :<, klazz.new("2.1.0")
+        klazz.new("2.1.0.4").must_be :<, klazz.new("2.1.1")
 
-      ComparableVersion(1).must_be :<, ComparableVersion(2.0)
-      ComparableVersion("2.0.3").must_be :<, ComparableVersion(2.1)
-      ComparableVersion("2.0.3.4").must_be :<, ComparableVersion(2.1)
+        klazz.new(1).must_be :<, klazz.new("2.0.0.0")
+        klazz.new(2.0).must_be :<, klazz.new("2.1.0.0")
+        klazz.new("2.1.0").must_be :<, klazz.new("2.1.1.0")
 
-      ComparableVersion(1).must_be :<, ComparableVersion("2.0.0")
-      ComparableVersion(1.2).must_be :<, ComparableVersion("2.1.0")
-      ComparableVersion("2.1.0.4").must_be :<, ComparableVersion("2.1.1")
+        klazz.new(1.99).must_be :<, klazz.new(2)
+        klazz.new("1.2.99").must_be :<, klazz.new(1.3)
+        klazz.new("1.2.3.99").must_be :<, klazz.new("1.2.4")
+      end
 
-      ComparableVersion(1).must_be :<, ComparableVersion("2.0.0.0")
-      ComparableVersion(2.0).must_be :<, ComparableVersion("2.1.0.0")
-      ComparableVersion("2.1.0").must_be :<, ComparableVersion("2.1.1.0")
+      it "returns false when lvalue is greater than rvalue" do
+        klazz.new(2).wont_be :<, klazz.new(1.2)
+        klazz.new(2).wont_be :<, klazz.new("1.2.3")
+        klazz.new(2).wont_be :<, klazz.new("1.2.3.4")
 
-      ComparableVersion(1.99).must_be :<, ComparableVersion(2)
-      ComparableVersion("1.2.99").must_be :<, ComparableVersion(1.3)
-      ComparableVersion("1.2.3.99").must_be :<, ComparableVersion("1.2.4")
-    end
+        klazz.new(2.0).wont_be :<, klazz.new(1)
+        klazz.new(2.1).wont_be :<, klazz.new("2.0.3")
+        klazz.new(2.1).wont_be :<, klazz.new("2.0.3.4")
 
-    it "returns false when lvalue is greater than rvalue" do
-      ComparableVersion(2).wont_be :<, ComparableVersion(1.2)
-      ComparableVersion(2).wont_be :<, ComparableVersion("1.2.3")
-      ComparableVersion(2).wont_be :<, ComparableVersion("1.2.3.4")
+        klazz.new("2.0.0").wont_be :<, klazz.new(1)
+        klazz.new("2.1.0").wont_be :<, klazz.new(1.2)
+        klazz.new("2.1.1").wont_be :<, klazz.new("2.1.0.4")
 
-      ComparableVersion(2.0).wont_be :<, ComparableVersion(1)
-      ComparableVersion(2.1).wont_be :<, ComparableVersion("2.0.3")
-      ComparableVersion(2.1).wont_be :<, ComparableVersion("2.0.3.4")
+        klazz.new("2.0.0.0").wont_be :<, klazz.new(1)
+        klazz.new("2.1.0.0").wont_be :<, klazz.new(2.0)
+        klazz.new("2.1.1.0").wont_be :<, klazz.new("2.1.0")
 
-      ComparableVersion("2.0.0").wont_be :<, ComparableVersion(1)
-      ComparableVersion("2.1.0").wont_be :<, ComparableVersion(1.2)
-      ComparableVersion("2.1.1").wont_be :<, ComparableVersion("2.1.0.4")
+        klazz.new(2).wont_be :<, klazz.new(1.99)
+        klazz.new(1.3).wont_be :<, klazz.new("1.2.99")
+        klazz.new("1.2.4").wont_be :<, klazz.new("1.2.3.99")
+      end
 
-      ComparableVersion("2.0.0.0").wont_be :<, ComparableVersion(1)
-      ComparableVersion("2.1.0.0").wont_be :<, ComparableVersion(2.0)
-      ComparableVersion("2.1.1.0").wont_be :<, ComparableVersion("2.1.0")
+      it "returns false when lvalue is equal to rvalue" do
+        klazz.new(1.0).wont_be :<, klazz.new(1)
+        klazz.new("1.2.0").wont_be :<, klazz.new(1.2)
+        klazz.new("1.2.3.0").wont_be :<, klazz.new("1.2.3")
 
-      ComparableVersion(2).wont_be :<, ComparableVersion(1.99)
-      ComparableVersion(1.3).wont_be :<, ComparableVersion("1.2.99")
-      ComparableVersion("1.2.4").wont_be :<, ComparableVersion("1.2.3.99")
-    end
-
-    it "returns false when lvalue is equal to rvalue" do
-      ComparableVersion(1.0).wont_be :<, ComparableVersion(1)
-      ComparableVersion("1.2.0").wont_be :<, ComparableVersion(1.2)
-      ComparableVersion("1.2.3.0").wont_be :<, ComparableVersion("1.2.3")
-
-      ComparableVersion(1).wont_be :<, ComparableVersion(1.0)
-      ComparableVersion(1.2).wont_be :<, ComparableVersion("1.2.0")
-      ComparableVersion("1.2.3").wont_be :<, ComparableVersion("1.2.3.0")
+        klazz.new(1).wont_be :<, klazz.new(1.0)
+        klazz.new(1.2).wont_be :<, klazz.new("1.2.0")
+        klazz.new("1.2.3").wont_be :<, klazz.new("1.2.3.0")
+      end
     end
   end
 end
