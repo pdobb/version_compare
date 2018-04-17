@@ -1,6 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
-class VersionCompare::ConversionsTest < Minitest::Spec
+class VersionCompare::ComparableVersionTest < Minitest::Spec
   describe VersionCompare::ComparableVersion do
     let(:klazz) { VersionCompare::ComparableVersion }
 
