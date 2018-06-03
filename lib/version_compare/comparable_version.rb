@@ -40,13 +40,13 @@ module VersionCompare
     def to_s
       NAMES.map { |name| public_send(name) }.compact.join(separator)
     end
-    alias :to_str :to_s
+    alias_method :to_str, :to_s
 
     # @return [Array] an Array representation of the version's parts
     def to_a
       NAMES.map { |name| public_send(name) }.compact
     end
-    alias :to_ary :to_a
+    alias_method :to_ary, :to_a
 
     # ComparableVersion components comparison method. Uses Comparable to assess
     # whether this ComparableVersion's component value or the other
@@ -68,7 +68,7 @@ module VersionCompare
       0
     end
 
-  private
+    private
 
     def identification
       version_identifiers =

@@ -5,7 +5,7 @@ SimpleCov.start do
 end
 puts "SimpleCov enabled."
 
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "version_compare"
 
 require "minitest/autorun"
@@ -14,7 +14,8 @@ require "pry"
 
 Minitest::Test.make_my_diffs_pretty!
 reporter_options = { color: true }
-Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new(reporter_options)
+Minitest::Reporters.use!(
+  Minitest::Reporters::DefaultReporter.new(reporter_options))
 
 def context(*args, &block)
   describe(*args, &block)

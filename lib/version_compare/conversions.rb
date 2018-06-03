@@ -3,8 +3,7 @@ module VersionCompare
   # conversion methods. Anytime one of the standard conversion methods are
   # needed, the Conversions module can be included and then used freely.
   module Conversions
-
-  module_function
+    module_function
 
     # Strict conversion method for creating a `ComparableVersion` object out of
     # anything that can be interpreted is a ComparableVersion.
@@ -28,9 +27,9 @@ module VersionCompare
       when String,
            Integer,
            Float,
-           -> val { val.respond_to?(:to_ary) }
+           ->(val) { val.respond_to?(:to_ary) }
         ComparableVersion.new(value)
-      when -> val { val.respond_to?(:to_comparable_version) }
+      when ->(val) { val.respond_to?(:to_comparable_version) }
         value.to_comparable_version
       else
         raise TypeError, "Cannot convert #{value.inspect} to ComparableVersion"

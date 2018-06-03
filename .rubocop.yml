@@ -1,0 +1,106 @@
+# AllCops:
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+Layout/FirstParameterIndentation:
+  EnforcedStyle: consistent_relative_to_receiver
+
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: same_line
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented_relative_to_receiver
+
+Layout/MultilineMethodDefinitionBraceLayout:
+  EnforcedStyle: same_line
+
+Layout/MultilineOperationIndentation:
+  Enabled: false # Waiting for e.g. `indented_relative_to_receiver`.
+
+Lint/AmbiguousOperator:
+  Enabled: false # Conflicts with other rules.
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false # Conflicts with other rules.
+
+Lint/SplatKeywordArguments:
+  Enabled: false # Removed from Rubocop; Remove this after upgrade.
+
+Lint/Void:
+  CheckForMethodsWithNoSideEffects: true
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - describe
+    - ips # Benchmarking
+
+Metrics/ClassLength:
+  Exclude:
+    - "test/**/*"
+
+Metrics/LineLength:
+  Max: 80
+  Exclude:
+    - "version_compare.gemspec"
+
+Naming/MethodName:
+  Exclude:
+    - "lib/version_compare/conversions.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "lib/version_compare/conversions.rb"
+
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - a
+    - b
+
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+Style/BlockDelimiters:
+  Enabled: false # Reconsider later.
+
+Style/EmptyElse:
+  # It"s helpful to show intent by including a comment in an else block.
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/ExpandPathArguments:
+  Exclude:
+    - "object_inspector.gemspec"
+
+Style/FormatString:
+  Enabled: false # % notation with an Array just reads better sometimes.
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/RegexpLiteral:
+  EnforcedStyle: mixed
+
+Style/RescueStandardError:
+  EnforcedStyle: implicit
+
+Style/SingleLineMethods:
+  Exclude:
+    - "test/**/*_test.rb"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes

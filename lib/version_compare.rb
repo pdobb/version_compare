@@ -1,3 +1,5 @@
+# VersionCompare is the base namespace for all modules/classes related to the
+# version_compare gem.
 module VersionCompare
 end
 
